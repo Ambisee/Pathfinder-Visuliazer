@@ -5,17 +5,19 @@ of Pathfinder Visualizer
 
 # --- Modules --- #
 import pygame
+import os
 from pf_pack.breadth_first import *
 from pf_pack.dijkstra import *
 from pf_pack.node import *
 
+os.environ['SDL_VIDEO_CENTERED'] = "1"
 pygame.init()
 
 # --- Pygame Window --- #
 WIDTH = 500
 RC = 50
 GAP = WIDTH // RC
-screen = pygame.display.set_mode((WIDTH, WIDTH + 50))
+screen = pygame.display.set_mode((WIDTH, WIDTH + 100))
 pygame.display.set_caption("Pathfinder Visualizer")
 
 # --- Text Objects --- #

@@ -54,9 +54,21 @@ def first_exec(draw, node_list, start, end, FPS):
 
 def first_drawpath(draw, node_list, start, end, FPS):
     ''' Draw the path - Breadth-First Search '''
-    current = end.last_node
-    end.set_end()
+    current = end
+    timer = 0
+    n_list = []
     while current != start:
-        current.set_path()
+        n_list.append(current.last_node)
         current = current.last_node
+
+    n_list.reverse()
+    for node in n_list:
+        start.set_start()
+        node.set_path()
+        while timer <= FPS * 1000:
+            timer += 1
+        timer = 0
         draw()
+
+    end.set_end()
+    draw()

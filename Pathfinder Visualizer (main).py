@@ -82,8 +82,13 @@ def main():
                         for node in row:
                             node.update_neighbors(node_list, RC)
                     dijkstra_exec(lambda: redraw_window(screen, node_list), node_list, start_node, end_node, FPS)
+                
                 if event.key == pygame.K_j and start_node != None and end_node != None:
-                    firs_exec2(lambda: redraw_window(screen, node_list), node_list, start_node, end_node, FPS)
+                    for row in node_list:
+                        for node in row:
+                            node.update_neighbors(node_list, RC)
+                    first_exec(lambda: redraw_window(screen, node_list), node_list, start_node, end_node, FPS)
+                
                 if event.key == pygame.K_c:
                     start_node = None
                     end_node = None
@@ -92,6 +97,7 @@ def main():
                             if node not in border:
                                 node.reset()
                                 node.set_none()
+            
             if pygame.mouse.get_pressed()[0]:
                 x, y = pygame.mouse.get_pos()
                 row_click, col_click = get_coor(x, y)
@@ -108,6 +114,7 @@ def main():
                     node.set_end()
                 elif node.isEmpty():
                     node.set_wall()
+            
             if pygame.mouse.get_pressed()[2]:
                 x, y = pygame.mouse.get_pos()
                 row_click, col_click = get_coor(x, y)

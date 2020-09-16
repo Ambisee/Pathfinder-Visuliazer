@@ -73,6 +73,9 @@ class Node:
     
     def isExplored(self):
         return self.color == GREEN
+    
+    def isUnexplored(self):
+        return self.color == RED
 
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.row * self.width, self.col * self.width, self.width, self.width))

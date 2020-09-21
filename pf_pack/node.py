@@ -27,7 +27,6 @@ class Node:
         self.color = WHITE
         self.neighbors = []
         self.last_node = None
-        self.shortest_dist = float('inf')
         self.f_score = float('inf')
         self.g_score = float('inf')
         self.h_score = float('inf')
@@ -94,7 +93,6 @@ class Node:
         self.color = WHITE
         self.neighbors = []
         self.last_node = None
-        self.shortest_dist = float('inf')
         self.f_score = float('inf')
         self.g_score = float('inf')
         self.h_score = float('inf')

@@ -18,7 +18,7 @@ def dijkstra_exec(draw, node_list, start, end, FPS):
     ''' Executes pathfinding with Dijkstra's Algorithm '''
     pause = False
     count = 0
-    start.shortest_dist = 0
+    start.f_score = 0
     start.last_node = start
     mainqueue = PriorityQueue()
     mainqueue.put((0, count, start))
@@ -51,14 +51,14 @@ def dijkstra_exec(draw, node_list, start, end, FPS):
             return
         
         for neighbor in current.neighbors:
-            temp_short = current.shortest_dist + 1
-            if temp_short < neighbor.shortest_dist:
-                neighbor.shortest_dist = temp_short
+            temp_short = current.f_score + 1
+            if temp_short < neighbor.f_score:
+                neighbor.f_score = temp_short
                 neighbor.last_node = current
                 if neighbor not in mainqueue_hash:
                     count += 1
                     mainqueue_hash.append(neighbor)
-                    mainqueue.put((neighbor.shortest_dist, count, neighbor))
+                    mainqueue.put((neighbor.f_score, count, neighbor))
                     neighbor.set_unexplored()
 
         if current != start:

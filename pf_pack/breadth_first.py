@@ -11,14 +11,16 @@ source: https://en.wikipedia.org/
 
 # --- Modules --- #
 import pygame
+import queue
 
 # --- Functions --- #
 def first_exec(draw, node_list, start, end, FPS):
     ''' Execute pathfinding with Breadth-First Search Algorithm '''
     pause = False
-    queue = [start]
+    mainqueue = queue.Queue()
+    mainqueue.put(start)
 
-    while len(queue) != 0:
+    while not mainqueue.empty():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -36,12 +38,12 @@ def first_exec(draw, node_list, start, end, FPS):
         if pause:
             continue
         
-        current = queue.pop(0)
+        current = mainqueue.get()
         for neighbor in current.neighbors:
             if not neighbor.isUnexplored() and not neighbor.isExplored():
                 neighbor.set_unexplored()
                 neighbor.last_node = current
-                queue.append(neighbor)
+                mainqueue.put(neighbor)
 
         if current != start:
             current.set_explored()

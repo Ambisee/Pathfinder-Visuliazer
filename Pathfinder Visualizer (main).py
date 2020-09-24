@@ -6,20 +6,26 @@ of Pathfinder Visualizer
 # --- Modules --- #
 import pygame
 import os
+from win32api import GetSystemMetrics
 from pf_pack.breadth_first import *
 from pf_pack.dijkstra import *
+from pf_pack.a_star import *
 from pf_pack.node import *
+from pf_pack.draw import *
 
+# --- Variables --- #
+WIDTH = 500
+window_res = (WIDTH + 100, WIDTH + 100)
+# os.environ['SDL_VIDEO_WINDOW_POS'] = f'{GetSystemMetrics(0)//2 - WIDTH//2}, {GetSystemMetrics(1)//2 - (WIDTH + 100)//2}'
 os.environ['SDL_VIDEO_CENTERED'] = "1"
 pygame.init()
 
 # --- Pygame Window --- #
-WIDTH = 500
 RC = 50
 GAP = WIDTH // RC
-screen = pygame.display.set_mode((WIDTH, WIDTH + 100))
+screen = pygame.display.set_mode(window_res)
 pygame.display.set_caption("Pathfinder Visualizer")
-
+    
 # --- Text Objects --- #
 font1 = pygame.font.SysFont('comicsans', 20)
 font2 = pygame.font.SysFont('system', 20)
@@ -27,20 +33,6 @@ text = ['L Mouse - Draw', 'R Mouse - Erase', 'Space - Execute/Stop Execution', "
 label = []
 
 # --- Function --- #
-def redraw_window(window, node_list):
-    ''' Clear, draw, and update window '''
-    window.fill((255, 255, 255))
-    for row in range(RC):
-        for col in range(RC):
-            node_list[row][col].draw(window)
-    
-    for row in range(RC + 1):
-        pygame.draw.line(window, GREY, (0, row * GAP), (WIDTH, row * GAP))
-    for column in range(RC):
-        pygame.draw.line(window, GREY, (column * GAP, 0), (column * GAP, WIDTH))
-    
-    pygame.display.update()
-
 def get_coor(x, y):
     row = x // GAP
     col = y // GAP
@@ -67,6 +59,9 @@ def main():
     node_list = [[Node(row, col, GAP) for col in range(RC)] for row in range(RC)]
     border = createBorder(node_list)
 
+    drawfunc = lambda: redraw_window(screen, node_list, GREY, WIDTH, RC, GAP)
+    drawpathfunc = lambda: drawpath(screen, node_list, start_node, end_node, GREY, WIDTH, RC, GAP, FPS)
+
     for node in border:
         node.set_wall()
     
@@ -83,14 +78,20 @@ def main():
                     for row in node_list:
                         for node in row:
                             node.update_neighbors(node_list, RC)
-                    dijkstra_exec(lambda: redraw_window(screen, node_list), node_list, start_node, end_node, FPS)
+                    dijkstra_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                 
                 if event.key == pygame.K_j and start_node != None and end_node != None:
                     for row in node_list:
                         for node in row:
                             node.update_neighbors(node_list, RC)
-                    first_exec(lambda: redraw_window(screen, node_list), node_list, start_node, end_node, FPS)
+                    first_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                 
+                if event.key == pygame.K_k and start_node != None and end_node != None:
+                    for row in node_list:
+                        for node in row:
+                            node.update_neighbors(node_list, RC)
+                    astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+
                 if event.key == pygame.K_c:
                     start_node = None
                     end_node = None
@@ -134,7 +135,7 @@ def main():
                 elif node not in border and not node.isEmpty():
                     node.set_none()
 
-        redraw_window(screen, node_list)
+        redraw_window(screen, node_list, GREY, WIDTH, RC, GAP)
 
 # --- Main Execution --- #
 if __name__ == "__main__":

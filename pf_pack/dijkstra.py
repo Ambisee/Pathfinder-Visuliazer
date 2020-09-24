@@ -14,11 +14,11 @@ from queue import PriorityQueue
 import pygame
 
 # --- Function --- #
-def dijkstra_exec(draw, node_list, start, end, FPS):
+def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
     ''' Executes pathfinding with Dijkstra's Algorithm '''
     pause = False
     count = 0
-    start.f_score = 0
+    start.g_score = 0
     start.last_node = start
     mainqueue = PriorityQueue()
     mainqueue.put((0, count, start))
@@ -33,7 +33,7 @@ def dijkstra_exec(draw, node_list, start, end, FPS):
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:
                         pause = True
-                        pause_menu()
+                        # pause_menu()
                     else:
                         pause = False
                 if event.key == pygame.K_SPACE:
@@ -47,41 +47,20 @@ def dijkstra_exec(draw, node_list, start, end, FPS):
 
         if current == end:
             current.set_end()
-            dijkstra_drawpath(draw, node_list, end, start, FPS)
+            drawpath()
             return
         
         for neighbor in current.neighbors:
-            temp_short = current.f_score + 1
-            if temp_short < neighbor.f_score:
-                neighbor.f_score = temp_short
+            temp_short = current.g_score + 1
+            if temp_short < neighbor.g_score:
+                neighbor.g_score = temp_short
                 neighbor.last_node = current
                 if neighbor not in mainqueue_hash:
                     count += 1
                     mainqueue_hash.append(neighbor)
-                    mainqueue.put((neighbor.f_score, count, neighbor))
+                    mainqueue.put((neighbor.g_score, count, neighbor))
                     neighbor.set_unexplored()
 
         if current != start:
             current.set_explored()
         draw()
-
-def dijkstra_drawpath(draw, node_list, end, start, FPS):
-    ''' Draw the path - Dijkstra's '''
-    current = end
-    timer = 0
-    n_list = []
-    while current != start:
-        n_list.append(current.last_node)
-        current = current.last_node
-
-    n_list.reverse()
-    for node in n_list:
-        start.set_start()
-        node.set_path()
-        while timer <= FPS * 1000:
-            timer += 1
-        timer = 0
-        draw()
-
-    end.set_end()
-    draw()

@@ -14,7 +14,7 @@ import pygame
 import queue
 
 # --- Functions --- #
-def first_exec(draw, node_list, start, end, FPS):
+def first_exec(draw, drawpath, node_list, start, end, FPS):
     ''' Execute pathfinding with Breadth-First Search Algorithm '''
     pause = False
     mainqueue = queue.Queue()
@@ -39,6 +39,7 @@ def first_exec(draw, node_list, start, end, FPS):
             continue
         
         current = mainqueue.get()
+        
         for neighbor in current.neighbors:
             if not neighbor.isUnexplored() and not neighbor.isExplored():
                 neighbor.set_unexplored()
@@ -50,27 +51,6 @@ def first_exec(draw, node_list, start, end, FPS):
         elif current == start:
             current.set_start()
         if current == end:
-            first_drawpath(draw, node_list, start, end, FPS)
+            drawpath()
             return
         draw()
-
-def first_drawpath(draw, node_list, start, end, FPS):
-    ''' Draw the path - Breadth-First Search '''
-    current = end
-    timer = 0
-    n_list = []
-    while current != start:
-        n_list.append(current.last_node)
-        current = current.last_node
-
-    n_list.reverse()
-    for node in n_list:
-        start.set_start()
-        node.set_path()
-        while timer <= FPS * 1000:
-            timer += 1
-        timer = 0
-        draw()
-
-    end.set_end()
-    draw()

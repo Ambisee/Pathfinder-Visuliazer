@@ -1,6 +1,6 @@
 '''
-Initialize the class to make the
-Node object
+Module for the initialization
+of the class to make the Node object
 '''
 
 # --- Modules --- #

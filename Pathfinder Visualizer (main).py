@@ -15,7 +15,7 @@ from pf_pack.draw import *
 
 # --- Variables --- #
 WIDTH = 500
-window_res = (WIDTH + 100, WIDTH + 100)
+window_res = (WIDTH + 150, WIDTH + 100)
 # os.environ['SDL_VIDEO_WINDOW_POS'] = f'{GetSystemMetrics(0)//2 - WIDTH//2}, {GetSystemMetrics(1)//2 - (WIDTH + 100)//2}'
 os.environ['SDL_VIDEO_CENTERED'] = "1"
 pygame.init()
@@ -53,14 +53,16 @@ def main():
     ''' Main execution function '''
     run = True
     clock = pygame.time.Clock()
+    algorithm = None
     FPS = 60
     start_node = None
     end_node = None
     node_list = [[Node(row, col, GAP) for col in range(RC)] for row in range(RC)]
     border = createBorder(node_list)
+    sels = init_selectors()
 
-    drawfunc = lambda: redraw_window(screen, node_list, GREY, WIDTH, RC, GAP)
-    drawpathfunc = lambda: drawpath(screen, node_list, start_node, end_node, GREY, WIDTH, RC, GAP, FPS)
+    drawfunc = lambda: redraw_window2(screen, node_list, GREY, sels, WIDTH, RC, GAP)
+    drawpathfunc = lambda: drawpath(screen, node_list, start_node, end_node, GREY, sels, WIDTH, RC, GAP, FPS)
 
     for node in border:
         node.set_wall()
@@ -68,29 +70,44 @@ def main():
     while run:
         clock.tick(FPS)
 
+        screen.fill((255,255,255))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and start_node != None and end_node != None:
-                    for row in node_list:
-                        for node in row:
-                            node.update_neighbors(node_list, RC)
-                    dijkstra_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
-                
-                if event.key == pygame.K_j and start_node != None and end_node != None:
-                    for row in node_list:
-                        for node in row:
-                            node.update_neighbors(node_list, RC)
-                    first_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
-                
-                if event.key == pygame.K_k and start_node != None and end_node != None:
-                    for row in node_list:
-                        for node in row:
-                            node.update_neighbors(node_list, RC)
-                    astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                if event.key == pygame.K_q:
+                    sels[0].set_selected()
+                    algorithm = sels[0].alg
+                    for i in range(len(sels)):
+                        if i != 0:
+                            sels[i].set_unselected()
+                if event.key == pygame.K_w:
+                    sels[1].set_selected()
+                    algorithm = sels[1].alg
+                    for i in range(len(sels)):
+                        if i != 1:
+                            sels[i].set_unselected()
+                if event.key == pygame.K_e:
+                    sels[2].set_selected()
+                    algorithm = sels[2].alg
+                    for i in range(len(sels)):
+                        if i != 2:
+                            sels[i].set_unselected()
+
+                if event.key == pygame.K_SPACE and start_node != None and end_node != None and algorithm != None:
+                  for row in node_list:
+                      for node in row:
+                          node.update_neighbors(node_list, RC)
+                  if algorithm == "Dijkstra":
+                      dijkstra_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                  elif algorithm == "First":
+                      first_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                  elif algorithm == "A":
+                      astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                  else:
+                      pass
 
                 if event.key == pygame.K_c:
                     start_node = None
@@ -101,25 +118,49 @@ def main():
                                 node.reset()
                                 node.set_none()
             
+            x, y = pygame.mouse.get_pos()
+            if x > WIDTH:
+                pos = y//(rect_width//2)
+                try:
+                    if not sels[pos].isHover() and not sels[pos].isSelected():
+                        for item in sels:
+                            if not item.isSelected():
+                                item.set_unselected()                        
+                        if not sels[pos].isSelected():
+                            sels[pos].set_hover()
+                    elif sels[pos].isSelected():
+                        for item in sels:
+                            if not item.isSelected():
+                                item.set_unselected()  
+                except:
+                    pass
+
             if pygame.mouse.get_pressed()[0]:
-                x, y = pygame.mouse.get_pos()
                 row_click, col_click = get_coor(x, y)
                 try:
                     node = node_list[row_click][col_click]
-                except IndexError:
-                    pass
 
-                if start_node == None and node.isEmpty():
-                    start_node = node
-                    node.set_start()
-                elif end_node == None and node.isEmpty():
-                    end_node = node
-                    node.set_end()
-                elif node.isEmpty():
-                    node.set_wall()
+                    if start_node == None and node.isEmpty():
+                        start_node = node
+                        node.set_start()
+                    elif end_node == None and node.isEmpty():
+                        end_node = node
+                        node.set_end()
+                    elif node.isEmpty():
+                        node.set_wall()
+                except IndexError:
+                    if x > WIDTH:
+                        try:
+                            pos = y//(rect_width//2)
+                            sels[pos].set_selected()
+                            algorithm = sels[pos].alg
+                            for i in range(len(sels)):
+                                if i != pos:
+                                    sels[i].set_unselected()
+                        except IndexError:
+                            pass
             
             if pygame.mouse.get_pressed()[2]:
-                x, y = pygame.mouse.get_pos()
                 row_click, col_click = get_coor(x, y)
                 try:
                     node = node_list[row_click][col_click]
@@ -135,6 +176,7 @@ def main():
                 elif node not in border and not node.isEmpty():
                     node.set_none()
 
+        drawsel(screen, sels, WIDTH)
         redraw_window(screen, node_list, GREY, WIDTH, RC, GAP)
 
 # --- Main Execution --- #

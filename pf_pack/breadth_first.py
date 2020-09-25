@@ -30,7 +30,7 @@ def first_exec(draw, drawpath, node_list, start, end, FPS):
                     if pause == False:
                         pause = True
                         # pause_menu()
-                    else:
+                    elif pause == True:
                         pause = False
                 if event.key == pygame.K_SPACE:
                     return

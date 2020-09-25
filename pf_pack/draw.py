@@ -101,7 +101,7 @@ def drawpath(window, node_list, start, end, color, sels, WIDTH, RC, GAP, FPS):
 def draw_keycontrol(window, WIDTH):
     ''' Draw the keycontrol instruction '''
     height = 0
-    x = 0
+    x = 5
     for text in labels:
         if WIDTH + height <= WIDTH + 100 - text.get_height():
             window.blit(text, (x, WIDTH + height))

@@ -53,13 +53,14 @@ def main():
     ''' Main execution function '''
     run = True
     clock = pygame.time.Clock()
-    algorithm = None
+    algorithm = "First"
     FPS = 60
     start_node = None
     end_node = None
     node_list = [[Node(row, col, GAP) for col in range(RC)] for row in range(RC)]
     border = createBorder(node_list)
     sels = init_selectors()
+    sels[0].set_selected()
 
     drawfunc = lambda: redraw_window2(screen, node_list, GREY, sels, WIDTH, RC, GAP)
     drawpathfunc = lambda: drawpath(screen, node_list, start_node, end_node, GREY, sels, WIDTH, RC, GAP, FPS)
@@ -102,10 +103,13 @@ def main():
                           node.update_neighbors(node_list, RC)
                   if algorithm == "Dijkstra":
                       dijkstra_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                      screen.fill((255,255,255))
                   elif algorithm == "First":
                       first_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                      screen.fill((255,255,255))
                   elif algorithm == "A":
                       astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                      screen.fill((255,255,255))
                   else:
                       pass
 

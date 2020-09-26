@@ -138,6 +138,10 @@ def main():
                                 item.set_unselected()  
                 except:
                     pass
+            else:
+                for item in sels:
+                    if not item.isSelected():
+                        item.set_unselected()  
 
             if pygame.mouse.get_pressed()[0]:
                 row_click, col_click = get_coor(x, y)

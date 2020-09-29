@@ -120,6 +120,7 @@ def init_selectors():
     selectors.append(AlgorithmSel("Breadth First Search (Q)", "BrFS"))
     selectors.append(AlgorithmSel("Dijkstra's Algorithm (W)", "Dij"))
     selectors.append(AlgorithmSel("A* Search (E)", "AS"))
+    selectors.append(AlgorithmSel("Best-First Search (R)", "BeFS"))
     return selectors
 
 def drawsel(window, sels, WIDTH):

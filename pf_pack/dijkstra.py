@@ -12,6 +12,7 @@ souce: https://en.wikipedia.org/
 # --- Modules --- #
 from queue import PriorityQueue
 import pygame
+import sys
 
 # --- Functions --- #
 def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
@@ -19,7 +20,6 @@ def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
     pause = False
     count = 0
     start.g_score = 0
-    start.last_node = start
     mainqueue = PriorityQueue()
     mainqueue.put((0, count, start))
     mainqueue_hash = [start]
@@ -28,7 +28,8 @@ def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
+                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:

@@ -10,8 +10,9 @@ source: https://en.wikipedia.org/
 '''
 
 # --- Modules --- #
-import pygame
 from queue import PriorityQueue
+import pygame
+import sys
 
 # --- Functions --- #
 def astar_exc(draw, drawpath, node_list, start, end, FPS):
@@ -29,7 +30,8 @@ def astar_exc(draw, drawpath, node_list, start, end, FPS):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
+                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:

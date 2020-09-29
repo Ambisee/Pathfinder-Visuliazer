@@ -12,6 +12,7 @@ source: https://en.wikipedia.org/
 # --- Modules --- #
 import pygame
 import queue
+import sys
 
 # --- Functions --- #
 def first_exec(draw, drawpath, node_list, start, end, FPS):
@@ -24,7 +25,8 @@ def first_exec(draw, drawpath, node_list, start, end, FPS):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
+                sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:
@@ -38,6 +40,10 @@ def first_exec(draw, drawpath, node_list, start, end, FPS):
             continue
         
         current = mainqueue.get()
+
+        if current == end:
+            drawpath()
+            return
         
         for neighbor in current.neighbors:
             if not neighbor.isUnexplored() and not neighbor.isExplored():
@@ -49,7 +55,5 @@ def first_exec(draw, drawpath, node_list, start, end, FPS):
             current.set_explored()
         elif current == start:
             current.set_start()
-        if current == end:
-            drawpath()
-            return
+
         draw()

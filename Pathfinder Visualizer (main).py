@@ -4,14 +4,16 @@ of Pathfinder Visualizer
 '''
 
 # --- Modules --- #
-import pygame
-import os
 from win32api import GetSystemMetrics
 from pf_pack.breadth_first import *
+from pf_pack.best_first import *
 from pf_pack.dijkstra import *
 from pf_pack.a_star import *
 from pf_pack.node import *
 from pf_pack.draw import *
+import pygame
+import sys
+import os
 
 # --- Variables --- #
 WIDTH = 500
@@ -74,8 +76,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
-            
+                sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     sels[0].set_selected()
@@ -95,6 +97,12 @@ def main():
                     for i in range(len(sels)):
                         if i != 2:
                             sels[i].set_unselected()
+                if event.key == pygame.K_r:
+                    sels[3].set_selected()
+                    algorithm = sels[3].alg
+                    for i in range(len(sels)):
+                        if i != 3:
+                            sels[i].set_unselected()
 
                 if event.key == pygame.K_SPACE and start_node != None and end_node != None and algorithm != None:
                   for row in node_list:
@@ -108,6 +116,9 @@ def main():
                       screen.fill((255,255,255))
                   elif algorithm == "AS":
                       astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
+                      screen.fill((255,255,255))
+                  elif algorithm == "BeFS":
+                      best_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                       screen.fill((255,255,255))
                   else:
                       pass

@@ -87,10 +87,11 @@ def drawpath(window, node_list, start, end, color, sels, WIDTH, RC, GAP, FPS):
         current = current.last_node
 
     n_list.reverse()
+    end.set_end()
     for node in n_list:
         start.set_start()
         node.set_path()
-        while timer <= FPS * 1000:
+        while timer <= FPS * 5000:
             timer += 1
         timer = 0
         redraw_window2(window, node_list, color, sels, WIDTH, RC, GAP)
@@ -116,9 +117,9 @@ def draw_keycontrol(window, WIDTH):
 def init_selectors():
     ''' Initialize list of selectors '''
     selectors = []
-    selectors.append(AlgorithmSel("Breadth First Search (Q)", "First"))
-    selectors.append(AlgorithmSel("Dijkstra's Algorithm (W)", "Dijkstra"))
-    selectors.append(AlgorithmSel("A* Search (E)", "A"))
+    selectors.append(AlgorithmSel("Breadth First Search (Q)", "BrFS"))
+    selectors.append(AlgorithmSel("Dijkstra's Algorithm (W)", "Dij"))
+    selectors.append(AlgorithmSel("A* Search (E)", "AS"))
     return selectors
 
 def drawsel(window, sels, WIDTH):

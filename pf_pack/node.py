@@ -17,7 +17,7 @@ WHITE = (255, 255, 255)
 GREY = (125, 125, 125)
 BLACK = (0, 0, 0)
 
-# --- Class --- #
+# --- Classes --- #
 class Node:
     def __init__(self, row, col, width):
         ''' Creates an individual node cube object '''

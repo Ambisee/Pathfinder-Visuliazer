@@ -34,7 +34,6 @@ def astar_exc(draw, drawpath, node_list, start, end, FPS):
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:
                         pause = True
-                        # pause_menu()
                     else:
                         pause = False  
                 if event.key == pygame.K_SPACE:

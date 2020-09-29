@@ -16,7 +16,6 @@ from pf_pack.draw import *
 # --- Variables --- #
 WIDTH = 500
 window_res = (WIDTH + 150, WIDTH + 100)
-# os.environ['SDL_VIDEO_WINDOW_POS'] = f'{GetSystemMetrics(0)//2 - WIDTH//2}, {GetSystemMetrics(1)//2 - (WIDTH + 100)//2}'
 os.environ['SDL_VIDEO_CENTERED'] = "1"
 pygame.init()
 
@@ -53,7 +52,7 @@ def main():
     ''' Main execution function '''
     run = True
     clock = pygame.time.Clock()
-    algorithm = "First"
+    algorithm = "BrFS"
     FPS = 60
     start_node = None
     end_node = None
@@ -101,13 +100,13 @@ def main():
                   for row in node_list:
                       for node in row:
                           node.update_neighbors(node_list, RC)
-                  if algorithm == "Dijkstra":
+                  if algorithm == "Dij":
                       dijkstra_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                       screen.fill((255,255,255))
-                  elif algorithm == "First":
+                  elif algorithm == "BrFS":
                       first_exec(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                       screen.fill((255,255,255))
-                  elif algorithm == "A":
+                  elif algorithm == "AS":
                       astar_exc(drawfunc, drawpathfunc, node_list, start_node, end_node, FPS)
                       screen.fill((255,255,255))
                   else:

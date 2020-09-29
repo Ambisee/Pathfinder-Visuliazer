@@ -13,7 +13,7 @@ souce: https://en.wikipedia.org/
 from queue import PriorityQueue
 import pygame
 
-# --- Function --- #
+# --- Functions --- #
 def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
     ''' Executes pathfinding with Dijkstra's Algorithm '''
     pause = False
@@ -33,7 +33,6 @@ def dijkstra_exec(draw, drawpath, node_list, start, end, FPS):
                 if event.key == pygame.K_ESCAPE:
                     if pause == False:
                         pause = True
-                        # pause_menu()
                     else:
                         pause = False
                 if event.key == pygame.K_SPACE:

@@ -1,4 +1,4 @@
-# Pathfinder-Visuliazer
+# Pathfinder Visuliazer
 Language : Python 3.8
 
 # Package Used
